@@ -1,6 +1,6 @@
 # 📍 Image Location Mapper
 
-🚀 **Live Demo:** [https://geolens-1-epms.onrender.com/](https://geolens-1-epms.onrender.com/)
+🚀 **Live Demo:** [https://geolens-1-1y0g.onrender.com/](https://geolens-1-epms.onrender.com/)
 
 A full-stack web application that extracts **GPS coordinates** from an image's
 **EXIF metadata** and displays the location on an **interactive map**.
