@@ -1,0 +1,6 @@
+# Don't send build output or IDE files into the Docker build context.
+# (The WAR is rebuilt inside the image, so the local target/ isn't needed.)
+target/
+*.iml
+.idea/
+.vscode/
