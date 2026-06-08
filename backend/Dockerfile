@@ -36,10 +36,14 @@ COPY --from=build /app/target/api-backend.war /usr/local/tomcat/webapps/api-back
 
 # Hosts like Render/Railway inject the port to use via the PORT env variable.
 # Tomcat normally hard-codes 8080, so we make its connector port configurable:
-#   1. rewrite server.xml to read the port from a property "port.http"
-#   2. default that property to 8080 (for local "docker run")
-#   3. pass the real PORT to the JVM at startup
-RUN sed -i 's/port="8080"/port="${port.http}"/' /usr/local/tomcat/conf/server.xml
+#   1. rewrite the HTTP connector to read its port from a property "port.http"
+#   2. DISABLE Tomcat's shutdown port (8005 -> -1) so the HTTP port is the only
+#      open socket. Otherwise the host can auto-detect the shutdown port by
+#      mistake and route traffic there ("Invalid shutdown command" errors).
+#   3. default port.http to 8080 (for local "docker run")
+#   4. pass the real PORT to the JVM at startup
+RUN sed -i 's/port="8080"/port="${port.http}"/' /usr/local/tomcat/conf/server.xml \
+ && sed -i 's/<Server port="8005" shutdown="SHUTDOWN">/<Server port="-1" shutdown="SHUTDOWN">/' /usr/local/tomcat/conf/server.xml
 ENV PORT=8080
 EXPOSE 8080
 

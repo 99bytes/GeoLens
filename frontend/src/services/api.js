@@ -8,7 +8,13 @@ import axios from "axios";
 
 // Base URL of the Tomcat backend. The WAR is deployed as "api-backend",
 // and the servlet is mapped to "/api/upload".
-const API_BASE_URL = "http://localhost:8080/api-backend";
+//
+// In production we set VITE_API_BASE_URL (e.g. on Render) to the deployed
+// backend URL. During local development it falls back to localhost.
+// NOTE: Vite only exposes env vars that start with "VITE_", and they are
+// baked in AT BUILD TIME — so changing it requires a rebuild/redeploy.
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api-backend";
 
 /**
  * Uploads an image file to the backend and returns the parsed JSON response.
