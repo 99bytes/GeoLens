@@ -48,4 +48,9 @@ ENV PORT=8080
 EXPOSE 8080
 
 # Launch Tomcat in the foreground, telling it which port to listen on.
-CMD ["sh", "-c", "catalina.sh run -Dport.http=${PORT}"]
+# IMPORTANT: the port must be set via CATALINA_OPTS so Tomcat passes it to the
+# JVM as a real "-D" system property (which server.xml's ${port.http} reads).
+# Passing "-Dport.http=..." as an argument after "run" does NOT work — Tomcat
+# treats it as a program argument, so the property never gets set and the
+# HTTP connector fails to bind ("No open ports detected").
+CMD ["sh", "-c", "export CATALINA_OPTS=\"-Dport.http=${PORT}\"; exec catalina.sh run"]
